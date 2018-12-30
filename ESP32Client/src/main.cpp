@@ -12,6 +12,7 @@ const char* HTTPServerPort =  "80";
 int LED_BUILTIN = 2;
 // 默认Wi-Fi 未连接
 wl_status_t WiFiStatus = WL_DISCONNECTED;
+bool HTTPSendSucdess = false;
 
 #define LED_CLOSE   digitalWrite(LED_BUILTIN, LOW)
 #define LED_OPEN   digitalWrite(LED_BUILTIN, HIGH)
@@ -45,6 +46,7 @@ char *WiFiStatusToString(int status)
 // 500ms定时任务
 void taskLED(void * parameter )
 {
+    bool LED_ON = false;
     Serial.printf("taskLED start...\r\n");
     pinMode(LED_BUILTIN, OUTPUT);
     LED_CLOSE;
@@ -54,13 +56,34 @@ void taskLED(void * parameter )
         // 联网后蓝灯常亮 
         if (WiFiStatus == WL_CONNECTED)
         {
-            LED_OPEN;
+            // HTTP 不在发送状态 灯常亮
+            if (HTTPSendSucdess == false)
+            {
+                LED_OPEN;
+                LED_ON = true;
+            }
+            else
+            {
+                // HTTP发送 灯闪烁
+                if (LED_ON == false)
+                {
+                    LED_OPEN; 
+                    LED_ON = true;   
+                }
+                else
+                {
+                    LED_CLOSE;
+                    LED_ON = false;    
+                }
+            }
+            
         }
         else
         {
             LED_CLOSE;
+            LED_ON = false;
         }
-        delay(1000);  
+        delay(500);  
     }
 }
 
@@ -113,7 +136,7 @@ void taskWiFi(void * parameter )
 void taskHTTP(void * parameter )
 {
     char httpURL[256];
-    int i = 0;
+    int i = 0, j = 0;
     Serial.printf("taskHTTP start...\r\n");
     while(1)
     {
@@ -123,21 +146,24 @@ void taskHTTP(void * parameter )
             i++;
             HTTPClient http;
             memset(httpURL, 0, 256);
-            sprintf(httpURL, "http://%s:%s/temp=123&humi=456", HTTPServerAddr, HTTPServerPort);
+            sprintf(httpURL, "http://%s:%s/temp=%d&humi=%d", HTTPServerAddr, HTTPServerPort, j, i);
             Serial.printf("httpURL: %s\r\n", httpURL);
             http.begin(httpURL); 
             http.addHeader("Content-Type", "text/plain");  //Specify the URL
             int httpCode = http.GET();                                        //Make the request
 
-            if (httpCode > 0) 
+            // http发送成功
+            if (httpCode == 200) 
             { //Check for the returning code
                 String payload = http.getString();
-                Serial.println(httpCode);
                 Serial.println(payload);
+                HTTPSendSucdess = true;
+                j++;
             }
             else 
             {
                 Serial.printf("Error on HTTP request, httpCode = %d\r\n", httpCode);
+                HTTPSendSucdess = false;
             }
 
             http.end(); //Free the resources
