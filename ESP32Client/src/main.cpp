@@ -4,9 +4,9 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-const char* ssid = "LEO_ASUS";
-const char* password =  "bhu8vgy7nji9";
-const char* HTTPServerAddr =  "192.168.199.140";
+const char* ssid = "Cleargrass_SZ";
+const char* password =  "cleargrass2015";
+const char* HTTPServerAddr =  "192.168.1.140";
 const char* HTTPServerPort =  "80";
 
 int LED_BUILTIN = 2;
@@ -108,15 +108,17 @@ void taskWiFi(void * parameter )
         // 未联网，准备连接Wi-Fi   
         if (WiFiStatus != WL_CONNECTED)
         {
-            
+            WiFi.disconnect(true);
+            delay(1000);
             Serial.printf("Connecting to Wi-Fi...\r\n");
-
+            WiFi.mode(WIFI_AP_STA);
+            delay(500);
             //连接WiFi 并等待连接成功
             WiFi.begin(ssid, password);
             i = 20;
             do
             {
-                delay(1000);
+                delay(2000);
                 WiFiStatus = WiFi.status();
                 Serial.printf(" WiFi.begin WiFiStatus = %s\r\n", WiFiStatusToString(WiFiStatus));
                 i--;
@@ -146,7 +148,7 @@ void taskHTTP(void * parameter )
             i++;
             HTTPClient http;
             memset(httpURL, 0, 256);
-            sprintf(httpURL, "http://%s:%s/temp=%d&humi=%d", HTTPServerAddr, HTTPServerPort, j, i);
+            sprintf(httpURL, "http://%s:%s/?deviceID=Test1&temp=%d&humi=%d", HTTPServerAddr, HTTPServerPort, j, i);
             Serial.printf("httpURL: %s\r\n", httpURL);
             http.begin(httpURL); 
             http.addHeader("Content-Type", "text/plain");  //Specify the URL
@@ -180,8 +182,8 @@ void setup()
     delay(200);
     Serial.println("ESP32 Client Start……");
     xTaskCreate(taskLED, "taskLED", 2048, NULL, 1, NULL);
-    xTaskCreate(taskWiFi, "taskWiFi", 8192, NULL, 3, NULL);
-    xTaskCreate(taskHTTP, "taskHTTP", 8192, NULL, 2, NULL);
+    xTaskCreate(taskWiFi, "taskWiFi", 16000, NULL, 3, NULL);
+    xTaskCreate(taskHTTP, "taskHTTP", 16000, NULL, 2, NULL);
 
 }
 
