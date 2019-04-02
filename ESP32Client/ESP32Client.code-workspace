@@ -2,12 +2,19 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "/Users/LEO/Documents/PlatformIO/Projects/ESP32-IDF",
+			"name": "ESP32-IDF"
+		},
+		{
+			"path": "/Users/LEO/.platformio/packages/framework-espidf"
 		}
 	],
 	"settings": {
 		"aliosStudio.sdkPath": "/Users/LEO/.aos/AliOS-Things",
 		"terminal.integrated.env.osx": {
-			"PATH": "/Users/LEO/.platformio/penv/bin:/Users/LEO/.platformio/penv:/anaconda3/bin:/Users/LEO/Applications:/Users/LEO/myGit/TinyEngine/tools/flash-burn-tools/osx:/usr/local/bin:/Users/LEO/Applications:/Library/Frameworks/Python.framework/Versions/3.6/bin:/Library/Frameworks/Python.framework/Versions/3.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/LEO/esp/xtensa-esp32-elf/bin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/aria2/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS",
+			"PATH": "/Users/LEO/.platformio/penv/bin:/Users/LEO/.platformio/penv:/Users/LEO/go/bin:/anaconda3/bin:/Users/LEO/Applications:/Users/LEO/myGit/TinyEngine/tools/flash-burn-tools/osx:/usr/local/bin:/Users/LEO/Applications:/Library/Frameworks/Python.framework/Versions/3.6/bin:/Library/Frameworks/Python.framework/Versions/3.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/LEO/esp/xtensa-esp32-elf/bin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/go/bin:/usr/local/aria2/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS",
 			"PLATFORMIO_CALLER": "vscode"
 		}
 	}
